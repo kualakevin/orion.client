@@ -9,7 +9,9 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 /*eslint-env node*/
-var connect = require('connect'),
+var express = require('express'),
+	http = require('http'),
+	compression = require('compression'),
     path = require('path'),
     socketio = require('socket.io'),
     util = require('util'),
@@ -21,7 +23,7 @@ function noop(req, res, next) { next(); }
 
 function auth(pwd) {
 	if (typeof pwd === 'string' && pwd.length > 0) {
-		return connect.basicAuth(function(user, password) {
+		return express.basicAuth(function(user, password) {
 			return password === pwd;
 		});
 	}
@@ -69,13 +71,23 @@ argslib.readConfigFile(configFile, function(configParams) {
 				configParams: configParams,
 				maxAge: (dev ? 0 : undefined),
 			}), appContext = orionMiddleware.appContext;
-			var server = connect()
+			
+		   /*started adding code here */
+			var app = express();
+			var server = http.createServer(app);
+			app.use(log ? express.logger('tiny') : noop);
+			app.use(auth(password || configParams.pwd));
+			app.use(compression());
+			app.use(orionMiddleware);
+			app.listen(port);
+			/*end */
+			/*var server = connect()
 				.use(log ? connect.logger('tiny') : noop)
 				.use(auth(password || configParams.pwd))
 				.use(connect.compress())
 				.use(orionMiddleware)
-				.listen(port);
-
+				.listen(port);*/
+				
 			// add socketIO and app support
 			var io = socketio.listen(server, { 'log level': 1 });
 			appSocket.install({ io: io, appContext: appContext });
