@@ -9,14 +9,14 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 /*eslint-env node*/
-var connect = require('connect');
+var express = require('express');
 var path = require('path');
-var mime = connect.mime;
-var statik = connect['static'];
+//var mime = connect.mime;
 
-mime.define({
+//not sure what mime is for
+/*mime.define({
 	'application/json': ['pref', 'json']
-});
+});*/
 
 var _24_HOURS = 1440 * 60000;
 
@@ -41,14 +41,14 @@ exports = module.exports = function(options) {
  */
 
 	// Handle the Orion IDE and Orion editor mappings:
-	return connect(
-		statik(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.core/web'), options),
-		statik(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.editor/web'), options),
-		statik(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.javascript/web'), options),
-		statik(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.ui/web'), options),
-		statik(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.help/web'), options),
-		statik(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.git/web'), options),
-		statik(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.webtools/web'), options),
-		statik(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.users/web'), options)
-	);
+	return express()
+	.use(express.static(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.core/web'), options))
+	.use(express.static(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.editor/web'), options))
+	.use(express.static(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.javascript/web'), options))
+	.use(express.static(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.ui/web'), options))
+	.use(express.static(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.help/web'), options))
+	.use(express.static(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.git/web'), options))
+	.use(express.static(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.webtools/web'), options))
+	.use(express.static(path.resolve(orionClientRoot, './bundles/org.eclipse.orion.client.users/web'), options))
+	
 };
