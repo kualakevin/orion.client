@@ -9,6 +9,7 @@
     "connect": "~2.8",
     "connect-redirection": "0.0.1",
     "deferred-fs": "~0.3.2",
+    "express": "^4.13.3",
     "express-json": "^1.0.0",
     "rimraf": "~2.2.6",
     "socket.io": "~1.0.4",
