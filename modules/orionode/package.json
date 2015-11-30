@@ -6,6 +6,7 @@
   "bugs": "https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Orion&component=Node",
   "dependencies": {
     "async": "^0.9.0",
+    "basic-auth": "^1.0.3",
     "compression": "^1.6.0",
     "connect": "~2.8",
     "connect-redirection": "0.0.1",

@@ -10,8 +10,9 @@
  *******************************************************************************/
 /*eslint-env node*/
 var express = require('express');
+var connect = require('connect');
 var path = require('path');
-//var mime = connect.mime;
+var mime = connect.mime;
 
 //not sure what mime is for
 /*mime.define({

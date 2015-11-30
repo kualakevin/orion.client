@@ -17,13 +17,14 @@ var express = require('express'),
     util = require('util'),
     appSocket = require('./lib/node_app_socket'),
     argslib = require('./lib/args'),
-    orion = require('./index.js');
+    orion = require('./index.js'),
+    basicAuth = require('basic-auth');
 
 function noop(req, res, next) { next(); }
 
 function auth(pwd) {
 	if (typeof pwd === 'string' && pwd.length > 0) {
-		return express.basicAuth(function(user, password) {
+		return basicAuth(function(user, password) {
 			return password === pwd;
 		});
 	}
@@ -72,7 +73,6 @@ argslib.readConfigFile(configFile, function(configParams) {
 				maxAge: (dev ? 0 : undefined),
 			}), appContext = orionMiddleware.appContext;
 			
-		   /*started adding code here */
 			var app = express();
 			var server = http.createServer(app);
 			app.use(log ? express.logger('tiny') : noop);
@@ -80,13 +80,6 @@ argslib.readConfigFile(configFile, function(configParams) {
 			app.use(compression());
 			app.use(orionMiddleware);
 			app.listen(port);
-			/*end */
-			/*var server = connect()
-				.use(log ? connect.logger('tiny') : noop)
-				.use(auth(password || configParams.pwd))
-				.use(connect.compress())
-				.use(orionMiddleware)
-				.listen(port);*/
 				
 			// add socketIO and app support
 			var io = socketio.listen(server, { 'log level': 1 });
