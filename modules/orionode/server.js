@@ -73,15 +73,16 @@ argslib.readConfigFile(configFile, function(configParams) {
 				maxAge: (dev ? 0 : undefined),
 			}), appContext = orionMiddleware.appContext;
 			
+			// add socketIO and app support
 			var app = express();
 			var server = http.createServer(app);
 			app.use(log ? express.logger('tiny') : noop);
 			app.use(auth(password || configParams.pwd));
 			app.use(compression());
 			app.use(orionMiddleware);
-			app.listen(port);
-				
-			// add socketIO and app support
+			server.listen(port);
+			
+			
 			var io = socketio.listen(server, { 'log level': 1 });
 			appSocket.install({ io: io, appContext: appContext });
 			server.on('error', function(err) {
