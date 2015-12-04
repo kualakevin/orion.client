@@ -22,13 +22,29 @@ var express = require('express'),
 
 function noop(req, res, next) { next(); }
 
+//might need to add a username argument too. 
 function auth(pwd) {
-	if (typeof pwd === 'string' && pwd.length > 0) {
-		return basicAuth(function(user, password) {
-			return password === pwd;
-		});
-	}
-	return noop;
+	return function(req,res,next){
+		function unauthorized(res) {
+			//redirect to login page
+			return next();
+		};
+		var user = basicAuth(req);
+	
+		if(!user || !user.name || !user.pass)
+		{
+			return unauthorized(res);
+		}
+		
+		//need to change to do proper check
+		if (user.name === 'some username' && user.pass === 'some password') {
+	    	return next();
+	  	}else
+	  	{
+	  		//redirect to login page
+	  	}
+  		return noop();
+  	}
 }
 
 // Get the arguments, the workspace directory, and the password file (if configured), then launch the server
