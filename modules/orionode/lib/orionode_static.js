@@ -25,5 +25,5 @@ exports = module.exports = function(root, options) {
  *   /           lib/orionode.client                 Mounts Orionode's plugin setup, and plugin code.
  */
 	return express()
-	  .use(express.static(root, options));
+	  .use(express.static(root));
 };

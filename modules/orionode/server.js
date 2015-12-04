@@ -23,14 +23,14 @@ var express = require('express'),
 function noop(req, res, next) { next(); }
 
 //might need to add a username argument too. 
-function auth(pwd) {
+/*function auth(pwd) {
 	return function(req,res,next){
 		function unauthorized(res) {
 			//redirect to login page
 			return next();
 		};
-		var user = basicAuth(req);
-	
+		
+		var user = basicAuth(req)
 		if(!user || !user.name || !user.pass)
 		{
 			return unauthorized(res);
@@ -45,6 +45,21 @@ function auth(pwd) {
 	  	}
   		return noop();
   	}
+}*/
+
+function auth(pwd) {
+    if (typeof pwd === 'string' && pwd.length > 0) {
+        return function checkAuth(req, res, next) {
+            var credentials = basicAuth(req);
+            if (!credentials || credentials.pass !== pwd ) {
+                res.statusCode = 401;
+                res.setHeader('WWW-Authenticate', 'Basic realm="example"');
+                res.end('Access denied');
+             }
+             return next();
+         };
+    }
+    return noop;
 }
 
 // Get the arguments, the workspace directory, and the password file (if configured), then launch the server
